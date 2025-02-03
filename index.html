@@ -6,11 +6,16 @@
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <title>Sample</title>
+        <title>碧依さくちゃんに愛を届けるゲーム</title>
         <script src="https://cdn.jsdelivr.net/npm/phaser@v3.87.0/dist/phaser.js"></script>
-        <script src="./main.js"></script>
+        <script src="./main.js"></script> 
         <style type="text/css">
             body {
+                margin: 0;
+                text-align: center;
+                background-color: #FCC4FF;
+            }
+            h2 {
                 margin: 0;
                 text-align: center;
                 background-color: #FCC4FF;
@@ -18,5 +23,14 @@
         </style>    
     </head>
     <body>
+        <div id="game"></div>
+
+        <br>
+        <h2>操作説明</h2>
+        ←, →（左右キー）：左右移動　　　　↑（上キー）：ジャンプ<br><br>
+        1. 巨大ハートに触れ、ハートを出す<br>
+        2. 巨大ハートから出たハートを集める<br>
+        3. 集めたハートをかごに入れる<br>
+        4. 制限時間までに多くのハート（愛）をかごに入れて、さくちゃんに届けよう！<br>
     </body>
 </html>

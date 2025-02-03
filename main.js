@@ -35,7 +35,7 @@ class StartScene extends Phaser.Scene {
         this.add.image(DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2, 'background_title');
         this.add.image(DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2-100, 'title');
 
-        let command_text = this.add.text(DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2+280, 'PLESS SPACE', {color: "#000", fontSize: 64, fontFamily: "Arial"}).setOrigin(0.5);
+        let command_text = this.add.text(DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2+280, 'スペースキーでスタート', {color: "#000", fontSize: 48, fontFamily: "Arial"}).setOrigin(0.5);
         this.input.keyboard.on('keydown-SPACE', function () {
             this.scene.start('GameScene');
         }, this);
@@ -59,6 +59,10 @@ class GameScene extends Phaser.Scene {
         this.load.spritesheet('kago','assets/kago.png',
             { frameWidth: 128, frameHeight: 128 }
         );
+        this.load.image('kago_icon', 'assets/kago_icon.png');
+        this.load.image('hanabira_icon', 'assets/hanabira_icon.png');
+        this.load.image('heart_icon', 'assets/heart_icon.png');
+        this.load.image('time_icon', 'assets/time_icon.png');
 
     }
 
@@ -66,9 +70,17 @@ class GameScene extends Phaser.Scene {
         // 背景
         this.add.image(DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2, 'background');
 
-        text_count1 = this.add.text(40, 10, '', {color: "#000", fontSize: 30, fontFamily: "Arial"})
-        text_count2 = this.add.text(40, 50, '', {color: "#000", fontSize: 30, fontFamily: "Arial"});
-        text_count3 = this.add.text(DISPLAY_WIDTH-100, 10, '', {color: "#000", fontSize: 30, fontFamily: "Arial"});
+        this.add.image(32, 32, 'hanabira_icon');
+        this.add.image(96, 32, 'heart_icon');
+
+        this.add.image(32, 96, 'kago_icon');
+        this.add.image(96, 96, 'heart_icon');
+
+        this.add.image(DISPLAY_WIDTH-128, 32, 'time_icon');
+
+        text_count1 = this.add.text(128, 0, '', {color: "#000", fontSize: 64, fontFamily: "Arial"})
+        text_count2 = this.add.text(128, 64, '', {color: "#000", fontSize: 64, fontFamily: "Arial"});
+        text_count3 = this.add.text(DISPLAY_WIDTH-96, 0, '', {color: "#000", fontSize: 64, fontFamily: "Arial"});
 
 
         // 巨大ハート
@@ -173,10 +185,6 @@ class GameScene extends Phaser.Scene {
             this.player.anims.play('jump',false);
             this.player.body.setVelocityY(-305);
         }
-        //👇↓キーが押されたら、下に移動
-        else if (this.cursors.down.isDown) {
-            this.player.body.setVelocityY(300);
-        }
 
         //👇←キーが押されたら、左に移動
         if (this.cursors.left.isDown) {
@@ -280,11 +288,6 @@ class EndingScene1 extends Phaser.Scene {
             frameRate: 5,
             repeat: 0
         });
-
-
-        this.input.keyboard.on('keydown-SPACE', function () {
-            this.scene.start('GameOverScene');
-        }, this);
     }
 
     update() {
@@ -360,11 +363,6 @@ class EndingScene2 extends Phaser.Scene {
             callbackScope: this,
             loop: true
         });
-        
-
-        this.input.keyboard.on('keydown-SPACE', function () {
-            this.scene.start('GameOverScene');
-        }, this);
     }
 
 
@@ -416,9 +414,10 @@ class GameOverScene extends Phaser.Scene {
         let text_top = this.add.text(DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2-250, 'あなたはさくちゃんに', {color: "#000", fontSize: 64, fontFamily: "Arial"}).setOrigin(0.5);
         let text_result = this.add.text(DISPLAY_WIDTH/2+80, DISPLAY_HEIGHT/2-125, SharedData.kagoHeartCount + "個", {color: "#000", fontSize: 96, fontFamily: "Arial"}).setOrigin(0.5);
         let text_bottom = this.add.text(DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2, '愛を届けました！', {color: "#000", fontSize: 64, fontFamily: "Arial"}).setOrigin(0.5);
-        let command_text = this.add.text(DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2+280, 'PLESS SPACE', {color: "#000", fontSize: 64, fontFamily: "Arial"}).setOrigin(0.5);
+        let command_text = this.add.text(DISPLAY_WIDTH/2, DISPLAY_HEIGHT-100 , 'XキーでX(Twitter)にシェア', {color: "#000", fontSize: 48, fontFamily: "Arial"}).setOrigin(0.5);
+        let command_text2 = this.add.text(DISPLAY_WIDTH/2, DISPLAY_HEIGHT-40, 'スペースキーでタイトルに戻る', {color: "#000", fontSize: 48, fontFamily: "Arial"}).setOrigin(0.5);
         
-        this.input.keyboard.on('keydown-UP', function () {
+        this.input.keyboard.on('keydown-X', function () {
             this.postTwitter();
         }, this);
 
@@ -429,7 +428,7 @@ class GameOverScene extends Phaser.Scene {
 
     // twitter投稿
     postTwitter(){
-        var msg = 'あなたはさくちゃんに' + SharedData.kagoHeartCount + '個の愛を届けました！%0D%0A%0D%0A';
+        var msg = 'あなたはさくちゃんに' + SharedData.kagoHeartCount + '個の愛を届けました！%0D%0A%0D%0A%23WithLoveToSakuraAoi%0D%0A';
         var url = document.location.href;
 
         url = "http://x.com/share?url=" + encodeURI(url) + "&text=" + msg;
@@ -450,6 +449,8 @@ const config = {
     },
     input: { keyboard: true },
     scene: [StartScene, GameScene, EndingScene1, EndingScene2, GameOverScene],
+    //ゲーム画面を描画するcanvasを書き出す先
+    parent: 'game',
 };
  
 var game = new Phaser.Game(config);
